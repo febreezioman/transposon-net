@@ -16,8 +16,8 @@ It has recently been proposed that biological lineages exist in a nested or mult
 **4. Output Types** Two kinds of diagrams were produced: histograms plotting the distribution of a given metric and GraphSpace graphs with node color and node size corresponding to a given metric. 
 
 ## Results
-![plot]()
-
+![plot](https://github.com/febreezioman/transposon-net/blob/cca5150abc6cadbb8f8c448da12fa0211aef6804/figures/composite1.png)
+![plot](https://github.com/febreezioman/transposon-net/blob/cca5150abc6cadbb8f8c448da12fa0211aef6804/figures/composite2.png)
 
 ## Discussion 
 
