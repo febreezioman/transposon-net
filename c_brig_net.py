@@ -6,17 +6,184 @@ import math
 import random
 import copy
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
 def main():
 	#file from the affiliated Github repo of Schneider et al. 2021
 	el, nl = read_edge_list('./SSN_mc476_edgelist.csv')
 	adj_list  = el_to_ajlist(el, nl)
+
+	#calculate network measures
 	cc = calculate_closeness(adj_list)
 	sp = all_pairs_shortest_paths(adj_list)
 	dd = get_degree_dist(adj_list)
 	eb = edge_betweenness(adj_list,el)
 	andeg = avg_neighbor_degree(adj_list)
+	clusc = clustering_coeff(adj_list)
 
+	#make plots
+	#plot_degree_dist(dd)
+	#plot_closeness_centrality_dist(cc)
+	#plot_eb_dist(eb)
+	#plot_clus_coef(clusc)
+
+	#to GraphSpace
+	#make_graph_cc(nl, el, cc,'Transposon Similarity Net with Closeness Centrality1')
+	#make_graph_and(nl, el, andeg,'Transposon Similarity Net with Average Neighbor Degree4')
+	make_graph_clusc(nl, el, clusc,'Transposon Similarity Net with Clustering Coeff 4')
+	#print(eb)
+
+
+
+##################################
+##Plot distributions
+##################################
+
+
+def plot_degree_dist(dd):
+	#adjust for log
+	plodd = np.log(list(dd.values()))
+	#plodd = dd.values()
+	plt.hist(plodd, bins =40)
+	plt.xlabel('Node Degree')
+	plt.ylabel('Log Frequency')
+	plt.savefig('./figures/dd_log_bin_1.png')
+
+def plot_closeness_centrality_dist(cc):
+	plocc = cc.values()
+	plt.hist(plocc,bins=20)
+	plt.xlabel('Closeness Centrality')
+	plt.ylabel('Frequency')
+	plt.savefig('./figures/cc_bins_20.png')
+
+def plot_eb_dist(eb):
+	#ploeb = eb.values()
+	ploeb = np.log(list(eb.values()))
+	plt.hist(ploeb,bins=15)
+	plt.xlabel('Edge Betweeness')
+	plt.ylabel('Frequency')
+	plt.savefig('./figures/eb_bins_15_log.png')
+
+def plot_clus_coef(clusc):
+	ploecl = clusc.values()
+	#plocl = np.log(list(clusc.values()))
+	plt.hist(ploecl,bins=15)
+	plt.xlabel('Clustering Coefficient')
+	plt.ylabel('Frequency')
+	plt.savefig('./figures/clusc_15.png')
+
+##################################
+##Graphs to GraphSpace
+##################################
+
+#plot to graphspace with nodes sized and colored by closeness centrality
+def make_graph_cc(nl, el, cc, gname):
+	maxm = max(cc.values())
+	G = GSGraph()
+	G.set_tags(['Independent Project'])
+	G.set_name('CC Transposon')
+	for n in nl:
+		G.add_node(n,label=n)
+		G.add_node_style(n,color=rgb_to_hex(0.5,1-cc[n]/maxm,cc[n]/maxm),height=cc[n]*8000,width=cc[n]*8000)
+
+	for e in el:
+		G.add_edge(e[0],e[1])
+		G.add_edge_style(e[0],e[1],width=2)
+
+	graph_name = input(gname)
+	G.set_name(gname)
+	email = input('Enter Email:')
+	password = input('Enter Password:')
+	gs = GraphSpace(email,password)
+	print('GraphSpace successfully connected.')
+
+	graphy = gs.post_graph(G)
+
+
+	## Print details about the graph & group
+	group='BIO331F21'
+	gs.share_graph(graph=graphy,group_name=group)
+	print('Graph successfully posted to %s group.' % (group))
+	groupid = gs.get_group(group_name=group).id
+	return
+
+#plot to graphspace with nodes sized and colored by clustering coefficient
+def make_graph_clusc(nl, el, cc, gname):
+	maxm = max(cc.values())
+	G = GSGraph()
+	G.set_tags(['Independent Project'])
+	G.set_name('CC Transposon')
+	for n in nl:
+		G.add_node(n,label=n)
+		G.add_node_style(n,color=rgb_to_hex(0.5*cc[n]/maxm,1-cc[n]/maxm,1),height=np.log(cc[n]*1000)*15,width=np.log(cc[n]*1000)*15)
+
+	for e in el:
+		G.add_edge(e[0],e[1])
+		G.add_edge_style(e[0],e[1],width=2)
+
+	graph_name = input(gname)
+	G.set_name(gname)
+	email = input('Enter Email:')
+	password = input('Enter Password:')
+	gs = GraphSpace(email,password)
+	print('GraphSpace successfully connected.')
+
+	graphy = gs.post_graph(G)
+
+
+	## Print details about the graph & group
+	group='BIO331F21'
+	gs.share_graph(graph=graphy,group_name=group)
+	print('Graph successfully posted to %s group.' % (group))
+	groupid = gs.get_group(group_name=group).id
+	return
+
+def make_graph_and(nl, el, cc, gname):
+	maxm = max(cc.values())
+	G = GSGraph()
+	G.set_tags(['Independent Project'])
+	G.set_name('CC Transposon')
+	for n in nl:
+		G.add_node(n,label=n)
+		G.add_node_style(n,color=rgb_to_hex(0,cc[n]/maxm,1-cc[n]/maxm),height=cc[n]*4,width=cc[n]*4)
+
+	for e in el:
+		G.add_edge(e[0],e[1])
+		G.add_edge_style(e[0],e[1],width=2)
+
+	graph_name = input(gname)
+	G.set_name(gname)
+	email = input('Enter Email:')
+	password = input('Enter Password:')
+	gs = GraphSpace(email,password)
+	print('GraphSpace successfully connected.')
+
+	graphy = gs.post_graph(G)
+
+
+	## Print details about the graph & group
+	group='BIO331F21'
+	gs.share_graph(graph=graphy,group_name=group)
+	print('Graph successfully posted to %s group.' % (group))
+	groupid = gs.get_group(group_name=group).id
+	return
+
+## RGB to Hex function - copied from Lab 3
+def rgb_to_hex(red,green,blue): # pass in three values between 0 and 1
+  maxHexValue= 255  ## max two-digit hex value (0-indexed)
+  r = int(red*maxHexValue)    ## rescale red
+  g = int(green*maxHexValue)  ## rescale green
+  b = int(blue*maxHexValue)   ## rescale blue
+  RR = format(r,'02x') ## two-digit hex representation
+  GG = format(g,'02x') ## two-digit hex representation
+  BB = format(b,'02x') ## two-digit hex representation
+  return '#'+RR+GG+BB
+
+
+##################################
+##Network creation, manipulation, and metric calculation
+##################################
 
 
 #From my HW2.py
@@ -56,6 +223,14 @@ def calculate_closeness(adj_list):
         cc[v] = 1/sum(x for x in shortest_paths_hw2(adj_list,v).values())
     return cc
 
+def clustering_coeff(adjlisty):
+	cccs = {}
+
+	emax = len(adjlisty.keys())
+	for key in adjlisty.keys():
+		cccs[key] = len(adjlisty[key])/emax
+	return cccs
+
 #From my Lab2.py submission
 def avg_neighbor_degree(adjlist) -> dict:
 	andeg = {}
@@ -72,6 +247,8 @@ def get_degree_dist(adj_list):
 	#degree 
 	for node in adj_list.keys():
 		dd[node] = len(adj_list[node])
+
+	return dd
 
 #from my HW2.py
 def shortest_paths_hw2(G,s):
