@@ -17,7 +17,10 @@ It has recently been proposed that biological lineages exist in a nested or mult
 
 ## Results
 ![plot](https://github.com/febreezioman/transposon-net/blob/cca5150abc6cadbb8f8c448da12fa0211aef6804/figures/composite1.png)
-![plot](https://github.com/febreezioman/transposon-net/blob/cca5150abc6cadbb8f8c448da12fa0211aef6804/figures/composite2.png)
+![plot](https://github.com/febreezioman/transposon-net/blob/7e605397e1034ed7aa557bdb8aa6ee643f88660a/figures/composite2.png)
+
+![plot](https://github.com/febreezioman/transposon-net/blob/9664937cfcdde8139f35bb5239c4c8f4639dc86e/figures/composite3.png)
+
 
 ## Discussion 
 
