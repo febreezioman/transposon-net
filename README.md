@@ -23,6 +23,7 @@ It has recently been proposed that biological lineages exist in a nested or mult
 
 ## References
 O’Malley, M.A. (2016). Reproduction Expanded: Multigenerational and Multilineal Units of Evolution. Philosophy of Science, 83, 835–847.
+
 Schneider, L., Guo, Y., Birch, D. & Sarkies, P. (2021). Network‐based visualisation reveals new insights into transposable element diversity. Mol Syst Biol, 17, e9600.
 
 
