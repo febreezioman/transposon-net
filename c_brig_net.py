@@ -27,11 +27,12 @@ def main():
 	#plot_closeness_centrality_dist(cc)
 	#plot_eb_dist(eb)
 	#plot_clus_coef(clusc)
+	plot_and(andeg)
 
 	#to GraphSpace
 	#make_graph_cc(nl, el, cc,'Transposon Similarity Net with Closeness Centrality1')
 	#make_graph_and(nl, el, andeg,'Transposon Similarity Net with Average Neighbor Degree4')
-	make_graph_clusc(nl, el, clusc,'Transposon Similarity Net with Clustering Coeff 4')
+	#make_graph_clusc(nl, el, clusc,'Transposon Similarity Net with Clustering Coeff 4')
 	#print(eb)
 
 
@@ -39,7 +40,14 @@ def main():
 ##################################
 ##Plot distributions
 ##################################
-
+def plot_and(andeg):
+	#adjust for log
+	#ploand = np.log(list(andeg.values()))
+	ploand = andeg.values()
+	plt.hist(ploand, bins =20)
+	plt.xlabel('Average Neihbor Degree')
+	plt.ylabel('Frequency')
+	plt.savefig('./figures/andeg_bins_20.png')
 
 def plot_degree_dist(dd):
 	#adjust for log
