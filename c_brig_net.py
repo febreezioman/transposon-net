@@ -372,17 +372,5 @@ def edge_betweenness(adj_list,edge_list):
     return edge_betweeny
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
 	main()
